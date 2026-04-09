@@ -1,0 +1,32 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: test-db
+    volumes:
+      - mongodb_data:/data/db
+    restart: always
+
+  backend:
+    build: ./backend
+    container_name: test-backend
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/testdb
+      - JWT_SECRET=test-secret-456
+    depends_on:
+      - mongodb
+    restart: always
+
+  frontend:
+    image: nginx:alpine
+    container_name: test-frontend
+    volumes:
+      - ./frontend/src:/usr/share/nginx/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "127.0.0.1:8019:80"
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  mongodb_data:
