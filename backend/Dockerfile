@@ -5,4 +5,4 @@ RUN npm install
 COPY . .
 RUN npx tsc
 EXPOSE 3001
-CMD ["node", "dist/index.js"]
+CMD ["node", "src/index.js"]
